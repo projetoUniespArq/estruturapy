@@ -1,8 +1,6 @@
 lcategoria = []
 ltematica = []
-newTematica = []
 llivro = []
-tipolivro=[]
 livro = dict()
 categoria = dict ()
 tematica = dict ()
@@ -37,59 +35,48 @@ def cadastroCategoriasTematicas ():
                 print("Categoria cadastrada com sucesso!")
                 main()           
         elif (opc==2): 
-            for i, j in enumerate (lcategoria):
+            cOrdenado=sorted(lcategoria,key=lambda l:l["Categoria"])
+            for i, j in enumerate (cOrdenado,start=1):
                 print(f'\n{i}-',end = ' ')
                 for k in j.values():
                     print(f'{k}', end=' ')
-            procuraCategoria = int(input("\nDigite o numero da categoria: "))
-            recebendoCategoria = lcategoria[procuraCategoria]["Categoria"]
-            newTematica.clear()
-            if ltematica == []:
-                tematica["Categoria"]=recebendoCategoria
-                novaTematica=input("Digite a tematica: ").upper()
-                newTematica.append(novaTematica)
-                tematica["Tematica"]=newTematica[:]
+            numeroCategoria = int(input("\nInforme o numero da categoria: "))
+            tematica["Categoria"] = lcategoria[numeroCategoria-1]["Categoria"]
+            tematica["Tematica"]= input("Digite a tematica: ").upper()
+            if tematica not in ltematica:
                 ltematica.append(tematica.copy())
-                print(ltematica)
+                print("Temática cadastrada com sucesso")
                 main()
-            a=0
-            for m in range (len(ltematica)):
-                if ltematica[m]["Categoria"]==recebendoCategoria:
-                    print(f"no for {m}")
-                    print(ltematica[m]["Categoria"])
-                    print(recebendoCategoria)
-                    a=m
-            if ltematica[a]["Categoria"]==recebendoCategoria:
-                novaTematica = input("Digite a tematica: ").upper()
-                ltematica[a]["Tematica"].append(novaTematica)
-                print(ltematica)
-                main()
-            else: 
-                tematica["Categoria"]=recebendoCategoria
-                novaTematica = input("Digite a tematica: ").upper()
-                newTematica.append(novaTematica)
-                tematica["Tematica"]=newTematica[:]
-                ltematica.append(tematica.copy())
-                print(ltematica)
-                main()
-                    
+            else:
+                print("Temática já cadastrada")               
         elif (opc==3):
                 main()    
 def cadastroLivros ():
     print("-----Cadastro de Livros------")
-    informeCategoria = input("Digite a categoria: ")
-    informeTematica= input("Digite a temática: ")
-
+    tOrdenado=sorted(ltematica,key=lambda l:(l["Categoria"],l["Tematica"]))
+    for i, j in enumerate (tOrdenado,start=1):
+        print(f'\n{i}-',end = ' ')
+        for k in j["Categoria"],j["Tematica"]:
+            print(f'{k} ',end = '')
+    newBook = int(input("\nDigite o numero correspondente a categoria e a tematica: "))
     livro = {
-        "Categoria":informeCategoria,
-        "Tematica":informeTematica,
         "Titulo": input("Informe o titulo: "),
         "Autor": input("Informe o Autor: "),
         "Ano": int(input("Digite o ano: ")),
+        "Quantidade":int(input("Informe a quantidade de livros: ")),
         "Assunto": input("Digite o Assunto: ")
-    }
+    }   
+    if livro not in llivro:
+        llivro.append(livro.copy())
+        ltematica[newBook-1]["Livro"]=(llivro)
+        print(ltematica)
+        print(llivro)
+        main()
+    else:
+        print("Livro já cadastrado")
+
     
-    print(livro)
+
 def main ():
     opcao=menu ()
     while opcao != 3:
@@ -97,6 +84,8 @@ def main ():
             cadastroCategoriasTematicas()
         elif opcao == 2:
             cadastroLivros()
+        
+
 
  
               
